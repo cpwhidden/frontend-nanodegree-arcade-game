@@ -1,8 +1,8 @@
 // Determine size of grid
 var numRows = 6;
 var numCols = 5;
-var rowHeight = 101;
-var colWidth = 83;
+var rowHeight = 101;  // pixels
+var colWidth = 83;  // pixels
 
 // Enemies our player must avoid
 var Enemy = function(x, y, speed) {
@@ -30,6 +30,7 @@ Enemy.prototype.update = function(dt) {
         this.speed = randomSpeed();
     }
 
+    // Detect a collision
     if (!((this.loc.x + 1) <= player.loc.x ||
          this.loc.x >= (player.loc.x + 1) ||
          (this.loc.y + 1) <= player.loc.y ||
@@ -56,25 +57,34 @@ Player.prototype = Object.create(Enemy.prototype);
 Player.constructor = Player;
 
 Player.prototype.update = function(dt) {
+    // Disallow player from moving rightward offscreen
     if (this.loc.x > numCols) {
-        this.loc.x = numCols;  // Disallow player from moving rightward offscreen
+        this.loc.x = numCols;  
     }
+
+    // Disallow player from moving leftward offscreen
     if (this.loc.x < 1) {
-        this.loc.x = 1;
+        this.loc.x = 1;  
     }
+
+    // Disallow player from moving downward offscreen
     if (this.loc.y > numRows) {
         this.loc.y = numRows;
     }
+
+    // Disallow player from moving upward offscreen
     if (this.loc.y <= 1) {
         this.reset();
     }
 };
 
+// Send a player back to the starting point
 Player.prototype.reset = function() {
     this.loc.x = 3;
     this.loc.y = 6;
 };
 
+// Determine what to do when a key is pressed
 Player.prototype.handleInput = function(key) {
     if (key == 'left') {
         this.loc.x -= 1;
@@ -96,14 +106,17 @@ var makeRandomEnemy = function() {
     return new Enemy(randomX(), randomY(), randomSpeed());
 };
 
+// A random starting point for the enemy leftward offscreen
 var randomX = function() {
     return Math.floor(Math.random() * -0.5) - 1;
 };
 
+// A random starting row for the enemy
 var randomY = function() {
     return Math.floor(Math.random() * 3) + 2;
 };
 
+// A random speed for the enemy
 var randomSpeed = function() {
     return Math.random() * 2 + 1;
 };
